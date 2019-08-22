@@ -85,14 +85,15 @@ describe('metadata plugin', () => {
 
 		describe('supports account metadata', () => {
 			const targetPublicKey = test.random.bytes(test.constants.sizes.signer); // 32
-
+			const valueBuffer = Buffer.from([0x6d, 0x65, 0x74, 0x61, 0x20, 0x69, 0x6e, 0x66,
+				0x6f, 0x72, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e]); // value 16b
 			test.binary.test.addAll(getCodec(EntityType.accountMetadata), 60, () => ({
 				buffer: Buffer.concat([
 					Buffer.from(targetPublicKey), // key 32b
 					Buffer.of(0xF2, 0x26, 0x6C, 0x06, 0x40, 0x83, 0xB2, 0x92), // scopedMetadataKey 8b
 					Buffer.of(0x03, 0x00), // valueSizeDelta
 					Buffer.of(0x10, 0x00), // valueSize
-					Buffer.of(0x6d, 0x65, 0x74, 0x61, 0x20, 0x69, 0x6e, 0x66, 0x6f, 0x72, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e) // value 16b
+					valueBuffer
 				]),
 
 				object: {
@@ -100,7 +101,7 @@ describe('metadata plugin', () => {
 					scopedMetadataKey: [0x066C26F2, 0x92B28340],
 					valueSizeDelta: 3,
 					valueSize: 16,
-					value: 'meta information'
+					value: valueBuffer
 				}
 			}));
 		});
